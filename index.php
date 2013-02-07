@@ -10,6 +10,13 @@
 
 DEFINE('WPE_PLUGIN_NAME', "wordpress-expander");
 
+// If we are adding / editing a page or post, include the popup html
+
+if($pagenow == "post-new.php" || $pagenow == "post.php") {
+	require_once('html/popup.html');
+}
+
+
 // Manage what stylesheets need to be loaded
 function wpExpanderAddStylesheets() {
     $stylesheets = array("css/index.css");
