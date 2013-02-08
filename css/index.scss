@@ -112,22 +112,31 @@
 }
 
 /*--------------------------Expanders--------------------------*/
-
-.expander_container {
-  h5 {
-    padding-left: 30px;
-    text-transform: uppercase;
-    background: #fff url('../images/collapsed.gif');
-    .collapsed {
+div.expander_container {
+  border-top: 1px dotted #C0C0C0;
+  padding-bottom: 20px;
+  .collapsed {
+    h5 {
       background: url('../images/collapsed.gif');
     }
-    .expanded {
+    .expander_content {
+      display: none;
+    }    
+  }
+  .expanded {
+    h5 {
       background: url('../images/expanded.gif');
     }
+    .expander_content {
+      display: block;
+    }
   }
-  .expander_content {
-    img {
-
+  h5.expander_heading {
+    padding-left: 30px;
+    text-transform: uppercase;
+    &:hover {
+      cursor: pointer;
     }
   }
 }
+

@@ -13,7 +13,10 @@ DEFINE('WPE_PLUGIN_NAME', "wordpress-expander");
 // If we are adding / editing a page or post, include the popup html
 
 if($pagenow == "post-new.php" || $pagenow == "post.php") {
-	require_once('html/popup.html');
+	function wpeInsertPopup() {
+		require_once('html/popup.html');
+	}
+	add_action('wp_before_admin_bar_render', 'wpeInsertPopup');
 }
 
 

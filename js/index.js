@@ -1,19 +1,22 @@
 $(document).ready(function(){
 	/*--------Front-End--------*/
-	$('.expander_container h5').first().on('click', function() {
+	// Expand / Collapse Functionality
+	$('.expander_container h5').on('click', function() {
 		// Find our content div
-		var content = $(this).siblings().first();
-
+		var parent = $(this).parent();
+		
 		// Swap +/- image
-		if(content.hasClass('collapsed')) {
-			content.removeClass('collapsed').addClass('expanded');
+		if(parent.hasClass('collapsed')) {
+			$(this).removeClass('collapsed').addClass('expanded');
 		} else {
-			content.removeClass('expanded').addClass('collapsed');
+			$(this).removeClass('expanded').addClass('collapsed');
 		}
 
 		// Toggle content div
-		content.toggle(200);
+		parent.find('.expander_content').toggle(200);
 	});
+	
+	$('.expander_container.collapsed .expander_content').toggle();
 
 	// Add Button on Edit Page/Post Page
 	$('#wp-content-media-buttons').append([
@@ -60,13 +63,13 @@ $(document).ready(function(){
 		
 		var checked = $('#expander_auto_load').prop('checked');
 		if(checked == true) {
-			var css = 'auto_load';
+			var css = 'expanded';
 		} else {
-			var css = '';
+			var css = 'collapsed';
 		}
 		var new_content = [
 			"<div class='expander_container " + css + "'>",
-			"<h5>" + $('#expander_title').val() + "</h5>",
+			"<h5 class='expander_heading'>" + $('#expander_title').val() + "</h5>",
 			"<div class='expander_content'>",
 			$('#expander_content').val(),
 			"</div>",
@@ -74,8 +77,8 @@ $(document).ready(function(){
 		].join('\n');
 		
 		// Append new expander div
-		wysiwyg_div.html(wysiwyg_div.html() + new_content);
-		regtext_div.html(regtext_div.html() + new_content);
+		wysiwyg_div.html(wysiwyg_div.html() + '\n' + new_content);
+		regtext_div.html(regtext_div.html() + '\n' + new_content);
 		
 		// Reset form fields
 		$('#expander_title').val('');
@@ -86,5 +89,3 @@ $(document).ready(function(){
 		$(this).parents('#expander_popup').hide();
 	});
 });
-
-
