@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	// Expander Show / Hide
+	/*--------Front-End--------*/
 	$('.expander_container h5').first().on('click', function() {
 		// Find our content div
 		var content = $(this).siblings().first();
@@ -22,7 +22,9 @@ $(document).ready(function(){
 		"</a>"
 	].join('\n'));
 
-	// Popup Management
+	/*--------Popup Management--------*/
+	
+	// Basic functionality
 	$('.expander_popup').click(function(e) {
 	    $('#expander_popup').show().addClass('wait');
 	});
@@ -36,6 +38,14 @@ $(document).ready(function(){
 	    e.stopPropagation();
 	});
 	
+	// Re-enable checkbox functionality (popup's stopPropagation() and preventDefault() screws it up)
+	$('.clickable').on('click', function(event) {
+		$(this).prop('checked', !$(this).prop('checked'));
+		event.stopPropagation();
+	});
+
+	
+	// Close the popup
 	$('#expander_form .close').on('click', function() {
 		// Reset form fields
 		$('#expander_title').val(' ');
@@ -43,14 +53,11 @@ $(document).ready(function(){
 		$('#expander_auto_load').prop('checked', false);
 	});
 	
-	$('.clickable').on('click', function(event) {
-		$(this).prop('checked', !$(this).prop('checked'));
-		event.stopPropagation();
-	});
-	
-	// Add Expander to Post/Page Content
+	// Upon clicking 'Insert Into Page', add the new content to the content editor
 	$('.add_expander').on('click', function() {
-		var content_div = $('#content_ifr').contents().find('#tinymce');
+		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
+		var regtext_div = $('#content');
+		
 		var checked = $('#expander_auto_load').prop('checked');
 		if(checked == true) {
 			var css = 'auto_load';
@@ -67,7 +74,8 @@ $(document).ready(function(){
 		].join('\n');
 		
 		// Append new expander div
-		content_div.html(content_div.html() + new_content);
+		wysiwyg_div.html(wysiwyg_div.html() + new_content);
+		regtext_div.html(regtext_div.html() + new_content);
 		
 		// Reset form fields
 		$('#expander_title').val('');
