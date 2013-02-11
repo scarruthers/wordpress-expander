@@ -1,4 +1,4 @@
-$(document).ready(function(){
+jQuery(document).ready(function(){
 	/*--------Front-End--------*/
 	// Expand / Collapse Functionality
 	$('.expander_container h5').on('click', function() {

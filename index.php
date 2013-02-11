@@ -8,7 +8,7 @@
 (http://creativecommons.org/licenses/by-nc-sa/3.0/legalcode)
 */
 
-DEFINE('WPE_PLUGIN_NAME', "wordpress-expander");
+DEFINE('WPE_PLUGIN_NAME', basename(dirname( __FILE__ )));
 
 // If we are adding / editing a page or post, include the popup html
 
