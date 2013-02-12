@@ -2,7 +2,7 @@
 .popup {
   width: 100%;
   min-height: 100%;
-  background: url(images/popup-bg.png) repeat;
+  background: rgba(105, 105, 105, .8) url(images/popup-bg.png) repeat;
   position: fixed;
   top: 0;
   left: 0;
@@ -12,7 +12,7 @@
   cursor: auto;
   .container {
     cursor: auto;
-    max-width: 400px;
+    max-width: 700px;
     overflow: hidden;
     padding: 0px 15px 15px 0px;
     margin: 46px auto 0px auto;
@@ -98,13 +98,11 @@
         width: 10px;
       }
     }
-    textarea {
-      width: 300px;
-    }
     label {
       width: 100%;
-      margin: 0px 0px 1px 0px;
+      margin: 0px 0px 10px 0px;
       float: left;
+      clear: right;
       color: #393939;
       font-size: 14px;
     }
@@ -115,6 +113,7 @@
 div.expander_container {
   border-top: 1px dotted #C0C0C0;
   padding-bottom: 20px;
+  padding-top: 10px;
   .collapsed {
     h5 {
       background: url('../images/collapsed.gif');

@@ -14,7 +14,7 @@ DEFINE('WPE_PLUGIN_NAME', basename(dirname( __FILE__ )));
 
 if($pagenow == "post-new.php" || $pagenow == "post.php") {
 	function wpeInsertPopup() {
-		require_once('html/popup.html');
+		require_once('html/popup.php');
 	}
 	add_action('wp_before_admin_bar_render', 'wpeInsertPopup');
 }

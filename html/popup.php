@@ -12,15 +12,25 @@
 						<div class='nonclickable'>
 							<label for='expander_title'>Title:</label>
 							<input type='text' name='title' id='expander_title' />
+							
 							<label for='expander_content'>Content:</label>
-							<textarea name='content' id='expander_content' rows='6' cols='40'></textarea>
+							<?php
+							$args = array(
+								'media_buttons' => false,
+								'textarea_rows' => 5,
+								'tabindex' => 2,
+								'teeny' => true
+							);
+							wp_editor('', 'expandercontent', $args); 
+							
+							?>
 						</div>
+						
 						<label class='clickable'>Show content on page load?
 							<input type='checkbox' name='auto_load' id='expander_auto_load' value='yes' />
 						</label>
+						
 						<div class='nonclickable'>
-							<br />
-							<br />
 							<a href='#' class='button add_expander'>Insert Into Page</a>
 							<a href='#' class='close'>Cancel</a>
 						</div>

@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
 		}
 
 		// Toggle content div
-		parent.find('.expander_content').toggle(200);
+		parent.find('.expander_content').toggle(300);
 	});
 	
 	$('.expander_container.collapsed .expander_content').toggle();
@@ -51,39 +51,45 @@ jQuery(document).ready(function(){
 	// Close the popup
 	$('#expander_form .close').on('click', function() {
 		// Reset form fields
-		$('#expander_title').val(' ');
-		$('#expander_content').val(' ');
+		$('#expander_title').val('');
+		$('#expander_content').val('');
 		$('#expander_auto_load').prop('checked', false);
 	});
 	
 	// Upon clicking 'Insert Into Page', add the new content to the content editor
 	$('.add_expander').on('click', function() {
-		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
-		var regtext_div = $('#content');
+		var title = $('#expander_title');
+		var content = $('#expander_content');
+		var auto_load = $('#expander_auto_load');
 		
-		var checked = $('#expander_auto_load').prop('checked');
-		if(checked == true) {
-			var css = 'expanded';
-		} else {
-			var css = 'collapsed';
+		// Make sure the user entered content
+		if(title.val() != '' && content.val() != '') {
+			var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
+			var regtext_div = $('#content');
+			
+			var checked = auto_load.prop('checked');
+			if(checked == true) {
+				var css = 'expanded';
+			} else {
+				var css = 'collapsed';
+			}
+			var new_content = [
+				"<div class='expander_container " + css + "'>",
+				"<h5 class='expander_heading'>" + title.val() + "</h5>",
+				"<div class='expander_content'>",
+				content.val(),
+				"</div>",
+				"</div>"
+			].join('\n');
+			
+			// Append new expander div
+			wysiwyg_div.html(wysiwyg_div.html() + '\n' + new_content);
+			regtext_div.html(regtext_div.html() + '\n' + new_content);
 		}
-		var new_content = [
-			"<div class='expander_container " + css + "'>",
-			"<h5 class='expander_heading'>" + $('#expander_title').val() + "</h5>",
-			"<div class='expander_content'>",
-			$('#expander_content').val(),
-			"</div>",
-			"</div>"
-		].join('\n');
-		
-		// Append new expander div
-		wysiwyg_div.html(wysiwyg_div.html() + '\n' + new_content);
-		regtext_div.html(regtext_div.html() + '\n' + new_content);
-		
 		// Reset form fields
-		$('#expander_title').val('');
-		$('#expander_content').val('');
-		$('#expander_auto_load').prop('checked', false);
+		title.val('');
+		content.val('');
+		auto_load.prop('checked', false);
 		
 		// Close popup
 		$(this).parents('#expander_popup').hide();
