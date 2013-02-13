@@ -50,23 +50,21 @@ jQuery(document).ready(function(){
 	
 	// Close the popup
 	$('#expander_form .close').on('click', function() {
-		// Reset form fields
+		// Reset popup fields
 		$('#expander_title').val('');
-		$('#expander_content').val('');
+		$('#expandercontent_ifr').contents().find('#tinymce').html('');
 		$('#expander_auto_load').prop('checked', false);
 	});
 	
 	// Upon clicking 'Insert Into Page', add the new content to the content editor
 	$('.add_expander').on('click', function() {
 		var title = $('#expander_title');
-		var content = $('#expander_content');
+		var content = $('#expandercontent_ifr').contents().find('#tinymce');
 		var auto_load = $('#expander_auto_load');
+		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
 		
 		// Make sure the user entered content
-		if(title.val() != '' && content.val() != '') {
-			var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
-			var regtext_div = $('#content');
-			
+		if(title.val() != '' && content.html() != '') {
 			var checked = auto_load.prop('checked');
 			if(checked == true) {
 				var css = 'expanded';
@@ -77,19 +75,23 @@ jQuery(document).ready(function(){
 				"<div class='expander_container " + css + "'>",
 				"<h5 class='expander_heading'>" + title.val() + "</h5>",
 				"<div class='expander_content'>",
-				content.val(),
+				content.html(),
 				"</div>",
 				"</div>"
 			].join('\n');
 			
 			// Append new expander div
 			wysiwyg_div.html(wysiwyg_div.html() + '\n' + new_content);
-			regtext_div.html(regtext_div.html() + '\n' + new_content);
 		}
 		// Reset form fields
 		title.val('');
-		content.val('');
+		content.html('');
 		auto_load.prop('checked', false);
+		
+		// Update WYSIWYG CSS
+		wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px').css('margin-top', '5px');
+		wysiwyg_div.find('.expander_container h5').css('margin', 0).css('cursor', 'pointer');
+		wysiwyg_div.find('.expander_content').hide();
 		
 		// Close popup
 		$(this).parents('#expander_popup').hide();

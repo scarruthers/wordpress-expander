@@ -10,21 +10,27 @@
 				<div class='content'>
 					<form id='expander_form' name='expander_form' method='post' action=''>
 						<div class='nonclickable'>
-							<label for='expander_title'>Title:</label>
-							<input type='text' name='title' id='expander_title' />
+							<label>Expander Title:
+								<input type='text' name='title' id='expander_title' />
+							</label>
+							<br /><br /><br />
 							
-							<label for='expander_content'>Content:</label>
 							<?php
 							$args = array(
 								'media_buttons' => false,
 								'textarea_rows' => 5,
 								'tabindex' => 2,
-								'teeny' => true
+								'teeny' => true,
+								'quicktags' => false,
+								'tinymce' => array(
+									'width' => '600'
+								),
 							);
 							wp_editor('', 'expandercontent', $args); 
 							
 							?>
 						</div>
+						<br />
 						
 						<label class='clickable'>Show content on page load?
 							<input type='checkbox' name='auto_load' id='expander_auto_load' value='yes' />

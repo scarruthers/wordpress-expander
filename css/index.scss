@@ -1,3 +1,14 @@
+.nonclickable {
+  #wp-expandercontent-wrap {
+    #wp-expandercontent-editor-container {
+      .wp-editor-container {
+        width: 600px;  
+      }
+    }
+  }  
+}
+
+
 /*--------------------------POP UPS--------------------------*/
 .popup {
   width: 100%;
@@ -109,7 +120,7 @@
   }
 }
 
-/*--------------------------Expanders--------------------------*/
+/*--------------------------Front-End Expanders--------------------------*/
 div.expander_container {
   border-top: 1px dotted #C0C0C0;
   padding-bottom: 20px;
@@ -138,4 +149,7 @@ div.expander_container {
     }
   }
 }
+
+/*--------------------------Back-End Tinymce Expanders--------------------------*/
+
 
