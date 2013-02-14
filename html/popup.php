@@ -22,9 +22,6 @@
 								'tabindex' => 2,
 								'teeny' => true,
 								'quicktags' => false,
-								'tinymce' => array(
-									'width' => '600'
-								),
 							);
 							wp_editor('', 'expandercontent', $args); 
 							

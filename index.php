@@ -22,13 +22,19 @@ if($pagenow == "post-new.php" || $pagenow == "post.php") {
 
 // Manage what stylesheets need to be loaded
 function wpExpanderAddStylesheets() {
-    $stylesheets = array("css/index.css");
+    $stylesheets = array("css/index.css", "http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css");
     $n = 0;
     foreach ($stylesheets as $stylesheet) {
-        $style_url = WP_PLUGIN_URL . '/' . WPE_PLUGIN_NAME . '/' . $stylesheet;
+        
         $style_file = WP_PLUGIN_DIR . '/' . WPE_PLUGIN_NAME . '/' . $stylesheet;
 
         if (file_exists($style_file)) {
+        	if(strlen(strstr($style_file, "http://"))>0) {
+        		$style_url = $stylesheet;
+        	} else {
+        		$style_url = WP_PLUGIN_URL . '/' . WPE_PLUGIN_NAME . '/' . $stylesheet;
+        	}
+			
             wp_register_style('wpExpanderStyleSheets-' . $n, $style_url);
             wp_enqueue_style('wpExpanderStyleSheets-' . $n);
         }

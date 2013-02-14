@@ -1,4 +1,28 @@
-jQuery(document).ready(function(){
+jQuery(window).load(function(){
+	// Establish some basic variables
+	var popup = $('#expander_popup');
+	var p_title = $('#expander_title');
+	var p_content = $('#expandercontent_ifr').contents().find('#tinymce');
+	var p_auto_load = $('#expander_auto_load');
+	var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
+	
+	// Updates the main wysiwyg editor to correctly display expanders
+	function updateEditor() {
+		wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px').css('margin-top', '5px');
+		wysiwyg_div.find('.expander_container h5').css('margin', 0).css('cursor', 'pointer');
+		wysiwyg_div.find('.expander_content').css('width', '1px').css('height', '1px').hide();
+		
+		wysiwyg_div.find('.expander_container h5').on('click', function() {
+			// Show popup
+			popup.show();
+			
+			// Populate popup with content
+			p_title.val($(this).html());
+			p_content.html($(this).next().html());
+			p_auto_load.prop('checked', $(this).parent().hasClass('expanded'));
+		});
+	}
+	
 	/*--------Front-End--------*/
 	// Expand / Collapse Functionality
 	$('.expander_container h5').on('click', function() {
@@ -29,11 +53,11 @@ jQuery(document).ready(function(){
 	
 	// Basic functionality
 	$('.expander_popup').click(function(e) {
-	    $('#expander_popup').show().addClass('wait');
+	    popup.show().addClass('wait');
 	});
 
 	$('.popup, .close').click(function() {
-	    $('#expander_popup').hide();
+	    popup.hide();
 	});
 
 	$('.popup .container .nonclickable').click(function(e) {
@@ -51,21 +75,16 @@ jQuery(document).ready(function(){
 	// Close the popup
 	$('#expander_form .close').on('click', function() {
 		// Reset popup fields
-		$('#expander_title').val('');
-		$('#expandercontent_ifr').contents().find('#tinymce').html('');
-		$('#expander_auto_load').prop('checked', false);
+		p_title.val('');
+		p_content.html('');
+		p_auto_load.prop('checked', false);
 	});
 	
 	// Upon clicking 'Insert Into Page', add the new content to the content editor
 	$('.add_expander').on('click', function() {
-		var title = $('#expander_title');
-		var content = $('#expandercontent_ifr').contents().find('#tinymce');
-		var auto_load = $('#expander_auto_load');
-		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
-		
 		// Make sure the user entered content
-		if(title.val() != '' && content.html() != '') {
-			var checked = auto_load.prop('checked');
+		if(p_title.val() != '' && p_content.html() != '') {
+			var checked = p_auto_load.prop('checked');
 			if(checked == true) {
 				var css = 'expanded';
 			} else {
@@ -73,27 +92,27 @@ jQuery(document).ready(function(){
 			}
 			var new_content = [
 				"<div class='expander_container " + css + "'>",
-				"<h5 class='expander_heading'>" + title.val() + "</h5>",
+				"<h5 class='expander_heading'>" + p_title.val() + "</h5>",
 				"<div class='expander_content'>",
-				content.html(),
-				"</div>",
-				"</div>"
-			].join('\n');
+				p_content.html(),
+				"</div></div>"
+			].join('\n').trim();
 			
 			// Append new expander div
-			wysiwyg_div.html(wysiwyg_div.html() + '\n' + new_content);
+			wysiwyg_div.html(wysiwyg_div.html() + new_content + '&nbsp;');
 		}
+		
 		// Reset form fields
-		title.val('');
-		content.html('');
-		auto_load.prop('checked', false);
+		p_title.val('');
+		p_content.html('');
+		p_auto_load.prop('checked', false);
 		
-		// Update WYSIWYG CSS
-		wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px').css('margin-top', '5px');
-		wysiwyg_div.find('.expander_container h5').css('margin', 0).css('cursor', 'pointer');
-		wysiwyg_div.find('.expander_content').hide();
-		
-		// Close popup
-		$(this).parents('#expander_popup').hide();
+		// Close popup, update editor contents
+		popup.hide();
+		updateEditor();
 	});
+	if(window.location.pathname.indexOf("wp-admin") !== -1) {
+		// We are on the backend
+		updateEditor();
+	}
 });
