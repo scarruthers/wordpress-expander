@@ -19,13 +19,11 @@ if($pagenow == "post-new.php" || $pagenow == "post.php") {
 	add_action('wp_before_admin_bar_render', 'wpeInsertPopup');
 }
 
-
 // Manage what stylesheets need to be loaded
 function wpExpanderAddStylesheets() {
     $stylesheets = array("css/index.css", "http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css");
     $n = 0;
     foreach ($stylesheets as $stylesheet) {
-        
         $style_file = WP_PLUGIN_DIR . '/' . WPE_PLUGIN_NAME . '/' . $stylesheet;
 
         if (file_exists($style_file)) {
@@ -47,7 +45,9 @@ function wpExpanderAddScripts() {
     wp_register_script('wpExpander', WP_PLUGIN_URL . '/' . WPE_PLUGIN_NAME . '/js/index.js');
 
     // Enqueue the scripts
-    wp_enqueue_script('wpExpander');
+	wp_enqueue_script('jquery');
+	
+	wp_enqueue_script('wpExpander');
 }
 
 // Actions, Filters, Hooks

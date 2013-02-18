@@ -8,7 +8,6 @@
   }  
 }
 
-
 /*--------------------------POP UPS--------------------------*/
 .popup {
   width: 100%;
@@ -121,10 +120,14 @@
 }
 
 /*--------------------------Front-End Expanders--------------------------*/
-div.expander_container {
+.expander_container {
   border-top: 1px dotted #C0C0C0;
   padding-bottom: 20px;
   padding-top: 10px;
+  .controls {
+    float: left;
+    clear: right;
+  }
   .collapsed {
     h5 {
       background: url('../images/collapsed.gif');
