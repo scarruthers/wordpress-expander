@@ -131,7 +131,6 @@
 				var new_content = [
 					"<div class='expander_container " + css + "'>",
 					"<h5 class='expander_heading'>" + p_title.val() + "</h5>",
-					controls,
 					"<div class='expander_content'>",
 					p_content.html(),
 					"</div></div>"
