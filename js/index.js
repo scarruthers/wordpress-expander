@@ -18,7 +18,11 @@
 		// Updates the main wysiwyg editor to correctly display expanders
 		function updateEditor() {
 			// Insert controls
-			$(controls).insertAfter(wysiwyg_div.find('.expander_heading'));
+			wysiwyg_div.find('.expander_heading').each(function() {
+				if(!$(this).next().hasClass('controls')) {
+					$(controls).insertAfter($(this));
+				}
+			});
 
 			// Update styles
 			wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px 5px 20px').css('margin-top', '5px');
@@ -34,8 +38,9 @@
 
 				// Populate popup with content
 				p_title.val($(this).html());
-				p_content.html($(this).next().html());
+				p_content.html($(this).next().next().html());
 				p_auto_load.prop('checked', $(this).parent().hasClass('expanded'));
+				$(this).parent().remove();
 			});
 
 			wysiwyg_div.find('.move_up').on('click', function() {
@@ -81,7 +86,6 @@
 		].join('\n'));
 
 		/*--------Popup Management--------*/
-
 		// Basic functionality
 		$('.expander_popup').click(function(e) {
 		    popup.show().addClass('wait');
@@ -101,7 +105,6 @@
 			$(this).prop('checked', !$(this).prop('checked'));
 			event.stopPropagation();
 		});
-
 
 		// Close the popup
 		$('#expander_form .close').on('click', function() {
@@ -137,7 +140,7 @@
 				].join('\n').trim();
 
 				// Append new expander div
-				wysiwyg_div.html(wysiwyg_div.html() + new_content + '&nbsp;');
+				tinyMCE.get('content').execCommand('mceInsertContent', false, new_content);
 			}
 
 			// Reset form fields
@@ -149,6 +152,14 @@
 			popup.hide();
 			updateEditor();
 		});
+
+		// Reload the popup tinymce editor
+		//tinyMCE.get('expandercontent').execCommand("mceRepaint");
+		//wysiwyg_div.attr('autocomplete', 'off').width(wyiwyg_div.width() + 10);
+
+		// jQuery(".mceEditor .mceLayout").each(function(i,ele){
+		//      jQuery("#"+ele.id).css('width',jQuery("#"+ele.id).width()+10)
+		//  });
 
 		// We are on the backend, automatically run post editor updates
 		if(window.location.pathname.indexOf("wp-admin") !== -1) {
