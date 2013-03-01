@@ -87,17 +87,19 @@
 
 		/*--------Popup Management--------*/
 		// Basic functionality
-		$('.expander_popup').click(function(e) {
+		$('.expander_popup').click(function(event) {
 		    popup.show().addClass('wait');
+			event.stopPropagation();
+			event.preventDefault();
 		});
 
 		$('.popup, .close').click(function() {
 		    popup.hide();
 		});
 
-		$('.popup .container .nonclickable').click(function(e) {
-		    e.preventDefault();
-		    e.stopPropagation();
+		$('.popup .container .nonclickable').click(function(event) {
+		    event.preventDefault();
+		    event.stopPropagation();
 		});
 
 		// Re-enable checkbox functionality (popup's stopPropagation() and preventDefault() screws it up)
@@ -153,15 +155,16 @@
 			updateEditor();
 		});
 
-		// Reload the popup tinymce editor
-		//tinyMCE.get('expandercontent').execCommand("mceRepaint");
-		//wysiwyg_div.attr('autocomplete', 'off').width(wyiwyg_div.width() + 10);
-
-		// jQuery(".mceEditor .mceLayout").each(function(i,ele){
-		//      jQuery("#"+ele.id).css('width',jQuery("#"+ele.id).width()+10)
-		//  });
-
 		// We are on the backend, automatically run post editor updates
+		var newWidth = $('#expander_popup .container').css('max-width');
+
+		$('#wp-expandercontent-editor-container').width(newWidth).width("-=40px");
+		console.log($('#wp-expandercontent-editor-container').width());
+		$('#expandercontent_parent').css({
+			'width': $('#wp-expandercontent-editor-container').width(),
+			'float': 'left'
+		});
+
 		if(window.location.pathname.indexOf("wp-admin") !== -1) {
 			updateEditor();
 		}
