@@ -6,6 +6,7 @@
 		var p_content = $('#expandercontent_ifr').contents().find('#tinymce');
 		var p_auto_load = $('#expander_auto_load');
 		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
+		var edited_element = null;
 
 		var controls = [
 			"<span class='controls'>",
@@ -40,7 +41,9 @@
 				p_title.val($(this).html());
 				p_content.html($(this).next().next().html());
 				p_auto_load.prop('checked', $(this).parent().hasClass('expanded'));
-				$(this).parent().remove();
+
+				// save element we're editing
+				edited_element = $(this).parent();
 			});
 
 			wysiwyg_div.find('.move_up').on('click', function() {
@@ -93,10 +96,6 @@
 			event.preventDefault();
 		});
 
-		$('.popup, .close').click(function() {
-		    popup.hide();
-		});
-
 		$('.popup .container .nonclickable').click(function(event) {
 		    event.preventDefault();
 		    event.stopPropagation();
@@ -110,10 +109,16 @@
 
 		// Close the popup
 		$('#expander_form .close').on('click', function() {
+			// Close popup
+			popup.hide();
+
 			// Reset popup fields
 			p_title.val('');
 			p_content.html('');
 			p_auto_load.prop('checked', false);
+
+			// Reset the last edited element
+			edited_element = null;
 		});
 
 		// Bind a handler to the 'Update' button to remove certain parts of the expanders
@@ -141,21 +146,27 @@
 					"</div></div>"
 				].join('\n').trim();
 
-				// Append new expander div
-				tinyMCE.get('content').execCommand('mceInsertContent', false, new_content);
+				if(edited_element != null) {
+					// We're editing, so simply replace old content
+					edited_element.replaceWith(new_content);
+				} else {
+					// We're adding, so insert new content at mouse position
+					tinyMCE.get('content').execCommand('mceInsertContent', false, new_content);
+				}
 			}
 
 			// Reset form fields
 			p_title.val('');
 			p_content.html('');
 			p_auto_load.prop('checked', false);
+			edited_element = null;
 
 			// Close popup, update editor contents
 			popup.hide();
 			updateEditor();
 		});
 
-		// We are on the backend, automatically run post editor updates
+		// We are on the back-end, automatically run post editor updates
 		var newWidth = $('#expander_popup .container').css('max-width');
 
 		$('#wp-expandercontent-editor-container').width(newWidth).width("-=40px");
