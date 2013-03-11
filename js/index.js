@@ -6,19 +6,24 @@
 		var p_content = $('#expandercontent_ifr').contents().find('#tinymce');
 		var p_auto_load = $('#expander_auto_load');
 		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
+		var edited_element = null;
 
 		var controls = [
 			"<span class='controls'>",
-				"<a href='#' class='move_up'>Move Up</a> ",
-				"<a href='#' class='move_down'>Move Down</a> ",
-				"<a href='#' class='delete_exp'>Delete</a>",
+				"<a href='#' class='move_up'><img src='images/expander-up.png' border='0' style='cursor:pointer' /></a> ",
+				"<a href='#' class='move_down'><img src='images/expander-down.png' border='0' style='cursor:pointer' /></a> ",
+				"<a href='#' class='delete_exp'><img src='images/expander-trash.png' border='0' style='cursor:pointer' /></a>",
 			"</span>",
 		].join('\n');
 
 		// Updates the main wysiwyg editor to correctly display expanders
 		function updateEditor() {
 			// Insert controls
-			$(controls).insertAfter(wysiwyg_div.find('.expander_heading'));
+			wysiwyg_div.find('.expander_heading').each(function() {
+				if(!$(this).next().hasClass('controls')) {
+					$(controls).insertAfter($(this));
+				}
+			});
 
 			// Update styles
 			wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px 5px 20px').css('margin-top', '5px');
@@ -34,8 +39,11 @@
 
 				// Populate popup with content
 				p_title.val($(this).html());
-				p_content.html($(this).next().html());
+				p_content.html($(this).next().next().html());
 				p_auto_load.prop('checked', $(this).parent().hasClass('expanded'));
+
+				// save element we're editing
+				edited_element = $(this).parent();
 			});
 
 			wysiwyg_div.find('.move_up').on('click', function() {
@@ -81,19 +89,16 @@
 		].join('\n'));
 
 		/*--------Popup Management--------*/
-
 		// Basic functionality
-		$('.expander_popup').click(function(e) {
+		$('.expander_popup').click(function(event) {
 		    popup.show().addClass('wait');
+			event.stopPropagation();
+			event.preventDefault();
 		});
 
-		$('.popup, .close').click(function() {
-		    popup.hide();
-		});
-
-		$('.popup .container .nonclickable').click(function(e) {
-		    e.preventDefault();
-		    e.stopPropagation();
+		$('.popup .container .nonclickable').click(function(event) {
+		    event.preventDefault();
+		    event.stopPropagation();
 		});
 
 		// Re-enable checkbox functionality (popup's stopPropagation() and preventDefault() screws it up)
@@ -102,13 +107,18 @@
 			event.stopPropagation();
 		});
 
-
 		// Close the popup
 		$('#expander_form .close').on('click', function() {
+			// Close popup
+			popup.hide();
+
 			// Reset popup fields
 			p_title.val('');
 			p_content.html('');
 			p_auto_load.prop('checked', false);
+
+			// Reset the last edited element
+			edited_element = null;
 		});
 
 		// Bind a handler to the 'Update' button to remove certain parts of the expanders
@@ -131,27 +141,41 @@
 				var new_content = [
 					"<div class='expander_container " + css + "'>",
 					"<h5 class='expander_heading'>" + p_title.val() + "</h5>",
-					controls,
 					"<div class='expander_content'>",
 					p_content.html(),
 					"</div></div>"
 				].join('\n').trim();
 
-				// Append new expander div
-				wysiwyg_div.html(wysiwyg_div.html() + new_content + '&nbsp;');
+				if(edited_element != null) {
+					// We're editing, so simply replace old content
+					edited_element.replaceWith(new_content);
+				} else {
+					// We're adding, so insert new content at mouse position
+					tinyMCE.get('content').execCommand('mceInsertContent', false, new_content);
+				}
 			}
 
 			// Reset form fields
 			p_title.val('');
 			p_content.html('');
 			p_auto_load.prop('checked', false);
+			edited_element = null;
 
 			// Close popup, update editor contents
 			popup.hide();
 			updateEditor();
 		});
 
-		// We are on the backend, automatically run post editor updates
+		// We are on the back-end, automatically run post editor updates
+		var newWidth = $('#expander_popup .container').css('max-width');
+
+		$('#wp-expandercontent-editor-container').width(newWidth).width("-=40px");
+		console.log($('#wp-expandercontent-editor-container').width());
+		$('#expandercontent_parent').css({
+			'width': $('#wp-expandercontent-editor-container').width(),
+			'float': 'left'
+		});
+
 		if(window.location.pathname.indexOf("wp-admin") !== -1) {
 			updateEditor();
 		}

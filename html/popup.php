@@ -21,7 +21,7 @@
 								'textarea_rows' => 5,
 								'tabindex' => 2,
 								'teeny' => true,
-								'quicktags' => false,
+								'quicktags' => false
 							);
 							wp_editor('', 'expandercontent', $args); 
 							

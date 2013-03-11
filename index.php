@@ -32,7 +32,7 @@ function wpExpanderAddStylesheets() {
         	} else {
         		$style_url = WP_PLUGIN_URL . '/' . WPE_PLUGIN_NAME . '/' . $stylesheet;
         	}
-			
+
             wp_register_style('wpExpanderStyleSheets-' . $n, $style_url);
             wp_enqueue_style('wpExpanderStyleSheets-' . $n);
         }
@@ -46,7 +46,8 @@ function wpExpanderAddScripts() {
 
     // Enqueue the scripts
 	wp_enqueue_script('jquery');
-	
+    wp_enqueue_script('tiny_mce');
+
 	wp_enqueue_script('wpExpander');
 }
 
