@@ -102,12 +102,14 @@
 		// Expand / Collapse Functionality
 		$('.expander_container h5').on('click', function() {
 			// Find our content div
-			var parent = $(this).parent();
+			var parent = $(this).parent().eq(0);
 
 			// Swap +/- image
 			if(parent.hasClass('collapsed')) {
+				$(parent).removeClass('collapsed').addClass('expanded');
 				$(this).removeClass('collapsed').addClass('expanded');
 			} else {
+				$(parent).removeClass('expanded').addClass('collapsed');
 				$(this).removeClass('expanded').addClass('collapsed');
 			}
 
@@ -210,7 +212,7 @@
 			'float': 'left'
 		});
 
-		if(window.location.pathname.indexOf("wp-admin") !== -1) {
+		if(window.location.pathname.indexOf("wp-admin") > -1) {
 			updateEditor();
 		}
 	})
