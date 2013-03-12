@@ -1,4 +1,37 @@
 (function($){
+    $.fn.disableSelection = function() {
+        return this.each(function() {
+            $(this).attr('unselectable', 'on')
+            .css({
+                '-moz-user-select':'none',
+                '-o-user-select':'none',
+                '-khtml-user-select':'none',
+                '-webkit-user-select':'none',
+                '-ms-user-select':'none',
+                'user-select':'none'
+            })
+            .each(function() {
+                $(this).attr('unselectable','on')
+                .bind('selectstart',function(){
+                    return false;
+                });
+            })
+            .bind('dblclick', function(event) {
+				if (!event) event = window.event;
+				event.preventDefault();
+				event.stopPropagation();
+				return false;
+			})
+			.bind('keypress', function(event) {
+				event.preventDefault();
+				event.stopPropagation();
+				return false;
+			});
+        });
+    }
+})(jQuery);
+
+(function($){
 	$(window).load(function() {
 		// Establish some basic variables
 		var popup = $('#expander_popup');
@@ -10,9 +43,9 @@
 
 		var controls = [
 			"<span class='controls'>",
-				"<a href='#' class='move_up'><img src='images/expander-up.png' border='0' style='cursor:pointer' /></a> ",
-				"<a href='#' class='move_down'><img src='images/expander-down.png' border='0' style='cursor:pointer' /></a> ",
-				"<a href='#' class='delete_exp'><img src='images/expander-trash.png' border='0' style='cursor:pointer' /></a>",
+				"<a href='#' class='move_up' style='cursor:pointer'><img src='../wp-content/plugins/wordpress-expander/images/expander-up.png' border='0' style='cursor:pointer' /></a> ",
+				"<a href='#' class='move_down'><img src='../wp-content/plugins/wordpress-expander/images/expander-down.png' border='0' style='cursor:pointer' /></a> ",
+				"<a href='#' class='delete_exp'><img src='../wp-content/plugins/wordpress-expander/images/expander-trash.png' border='0' style='cursor:pointer' /></a>",
 			"</span>",
 		].join('\n');
 
@@ -28,7 +61,7 @@
 			// Update styles
 			wysiwyg_div.find('.expander_container').css('border', '1px dotted #000').css('height', '15px').css('padding', '5px 20px 5px 20px').css('margin-top', '5px');
 			wysiwyg_div.find('.expander_container h5').css('margin', 0).css('cursor', 'pointer').css('float', 'left');
-			wysiwyg_div.find('.expander_container').disableSelection();
+			wysiwyg_div.find('.expander_container, .expander_heading, .expander_content').attr('contentEditable', false).disableSelection();
 			wysiwyg_div.find('.expander_content').css('width', '1px').css('height', '1px').hide();
 			wysiwyg_div.find('.controls').css('float', 'right').css('clear', 'right').css('display', 'inline');
 			wysiwyg_div.find('.controls a').css('cursor', 'pointer');
@@ -46,19 +79,22 @@
 				edited_element = $(this).parent();
 			});
 
-			wysiwyg_div.find('.move_up').on('click', function() {
+			wysiwyg_div.find('.move_up').on('click', function(event) {
 				var parent = $(this).parents('.expander_container');
 				parent.insertBefore(parent.prev());
+				return false;
 			});
-			wysiwyg_div.find('.move_down').on('click', function() {
+			wysiwyg_div.find('.move_down').on('click', function(event) {
 				var parent = $(this).parents('.expander_container');
 				parent.insertAfter(parent.next());
+				return false;
 			});
 
-			wysiwyg_div.find('.delete_exp').on('click', function() {
+			wysiwyg_div.find('.delete_exp').on('click', function(event) {
 				if(confirm('Are you sure you want to delete this expander?')) {
 					$(this).parents('.expander_container').remove();
 				}
+				return false;
 			});
 		}
 
@@ -125,7 +161,6 @@
 		$('#publish').on('click', function(event) {
 			wysiwyg_div.find('.controls').remove();
 			wysiwyg_div.find('.expander_container, .expander_heading, .expander_content').removeAttr('style').removeAttr('data-mce-style');
-			console.log('Controls and styles removed.');
 		});
 
 		// Upon clicking 'Insert Into Page', add the new content to the content editor
@@ -170,7 +205,6 @@
 		var newWidth = $('#expander_popup .container').css('max-width');
 
 		$('#wp-expandercontent-editor-container').width(newWidth).width("-=40px");
-		console.log($('#wp-expandercontent-editor-container').width());
 		$('#expandercontent_parent').css({
 			'width': $('#wp-expandercontent-editor-container').width(),
 			'float': 'left'
