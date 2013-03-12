@@ -182,7 +182,9 @@
 					p_content.html(),
 					"</div></div>"
 				].join('\n').trim();
-
+				if(wysiwyg_div.length == 1) {
+					new_content = new_content + "&nbsp;";
+				}
 				if(edited_element != null) {
 					// We're editing, so simply replace old content
 					edited_element.replaceWith(new_content);
