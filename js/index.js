@@ -72,7 +72,7 @@
 
 				// Populate popup with content
 				p_title.val($(this).html());
-				p_content.html($(this).next().next().html());
+				p_content.html($(this).parent('.expander_container').find('.expander_content').html());
 				p_auto_load.prop('checked', $(this).parent().hasClass('expanded'));
 
 				// save element we're editing
