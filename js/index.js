@@ -77,6 +77,9 @@
 
 				// save element we're editing
 				edited_element = $(this).parent();
+
+				// Update button to indicate we're 'saving' changes, rather than inserting a new element
+				popup.find('.add_expander').text('Save');
 			});
 
 			wysiwyg_div.find('.move_up').on('click', function(event) {
@@ -157,6 +160,9 @@
 
 			// Reset the last edited element
 			edited_element = null;
+
+			// Update button to make sure it says 'insert into page', for next expander
+			popup.find('.add_expander').text('Insert Into Page');
 		});
 
 		// Bind a handler to the 'Update' button to remove certain parts of the expanders
@@ -201,6 +207,9 @@
 			p_content.html('');
 			p_auto_load.prop('checked', false);
 			edited_element = null;
+
+			// Update button to make sure it says 'insert into page', for next expander
+			popup.find('.add_expander').text('Insert Into Page');
 
 			// Close popup, update editor contents
 			popup.hide();
