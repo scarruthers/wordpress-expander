@@ -41,6 +41,9 @@
 		var wysiwyg_div = $('#content_ifr').contents().find('#tinymce');
 		var edited_element = null;
 
+		// Remove wordpress 'edit image' controls
+		$('#wp_editbtns').remove();
+
 		var controls = [
 			"<span class='controls'>",
 				"<a href='#' class='move_up' style='cursor:pointer'><img src='../wp-content/plugins/wordpress-expander/images/expander-up.png' border='0' style='cursor:pointer' /></a> ",
@@ -85,6 +88,10 @@
 			wysiwyg_div.find('.move_up').on('click', function(event) {
 				var parent = $(this).parents('.expander_container');
 				parent.insertBefore(parent.prev());
+
+				event.stopPropagation();
+				event.preventDefault();
+
 				return false;
 			});
 			wysiwyg_div.find('.move_down').on('click', function(event) {

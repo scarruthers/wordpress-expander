@@ -10,6 +10,10 @@
 
 DEFINE('WPE_PLUGIN_NAME', basename(dirname( __FILE__ )));
 
+// Include necessary files
+
+require_once('functions.php');
+
 // If we are adding / editing a page or post, include the popup html
 
 if($pagenow == "post-new.php" || $pagenow == "post.php") {
@@ -51,12 +55,16 @@ function wpExpanderAddScripts() {
 	wp_enqueue_script('wpExpander');
 }
 
-// Actions, Filters, Hooks
+// Add stylesheets and scripts
 
 add_action('wp_print_styles', 'wpExpanderAddStylesheets');
 add_action('admin_print_styles', 'wpExpanderAddStylesheets');
 
 add_action('wp_enqueue_scripts', 'wpExpanderAddScripts');
 add_action('admin_enqueue_scripts', 'wpExpanderAddScripts');
+
+// Add misc. filters
+
+add_filter('mce_buttons', 'wpExpanderButtons');
 
 ?>
