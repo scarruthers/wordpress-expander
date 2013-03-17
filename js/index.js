@@ -88,10 +88,6 @@
 			wysiwyg_div.find('.move_up').on('click', function(event) {
 				var parent = $(this).parents('.expander_container');
 				parent.insertBefore(parent.prev());
-
-				event.stopPropagation();
-				event.preventDefault();
-
 				return false;
 			});
 			wysiwyg_div.find('.move_down').on('click', function(event) {
