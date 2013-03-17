@@ -53,7 +53,7 @@
 		function updateEditor() {
 			// Insert controls
 			wysiwyg_div.find('.expander_heading').each(function() {
-				if(!$(this).next().hasClass('controls')) {
+				if(!$(this).parent('.expander_container').has('.controls')) {
 					$(controls).insertAfter($(this));
 				}
 			});
