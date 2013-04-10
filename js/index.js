@@ -105,23 +105,41 @@
 		}
 
 		/*--------Front-End--------*/
+		function updateClasses(_this, toggle) {
+			var parent = $(_this).parent();
+
+			// Swap +/- image
+			if(toggle) {
+				// Toggle state classes
+				if(parent.hasClass('collapsed')) {
+					$(parent).removeClass('collapsed').addClass('expanded');
+					$(_this).removeClass('collapsed').addClass('expanded');
+				} else {
+					$(parent).removeClass('expanded').addClass('collapsed');
+					$(_this).removeClass('expanded').addClass('collapsed');
+				}
+				// Toggle state of content div
+				parent.find('.expander_content').toggle(300);
+			} else {
+				if(parent.hasClass('collapsed')) {
+					$(_this).addClass('collapsed');
+				} else {
+					$(_this).addClass('expanded');
+				}
+			}
+		}
+
 		// Expand / Collapse Functionality
 		$('.expander_container h5').on('click', function() {
 			// Find our content div
-			var parent = $(this).parent().eq(0);
-
-			// Swap +/- image
-			if(parent.hasClass('collapsed')) {
-				$(parent).removeClass('collapsed').addClass('expanded');
-				$(this).removeClass('collapsed').addClass('expanded');
-			} else {
-				$(parent).removeClass('expanded').addClass('collapsed');
-				$(this).removeClass('expanded').addClass('collapsed');
-			}
-
-			// Toggle content div
-			parent.find('.expander_content').toggle(300);
+			updateClasses(this, true);
 		});
+
+		$('.expander_container h5').each(function() {
+			updateClasses(this, false);
+		});
+
+
 
 		$('.expander_container.collapsed .expander_content').toggle();
 
