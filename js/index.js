@@ -210,15 +210,12 @@
 					"</div></div>"
 				].join('\n').trim();
 
-				if(wysiwyg_div.length == 1) {
-					new_content = new_content + "&nbsp;";
-				}
-
 				if(edited_element != null) {
 					// We're editing, so simply replace old content
 					edited_element.replaceWith(new_content);
 				} else {
-					// We're adding, so insert new content at mouse position
+					// We're adding, so insert new content at mouse position. Also, add newline
+					new_content = new_content + "&nbsp;";
 					tinyMCE.get('content').execCommand('mceInsertContent', false, new_content);
 				}
 			}
